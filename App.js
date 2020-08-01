@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-
+import Slider from '@react-native-community/slider';
 import React from 'react';
 import {
   SafeAreaView,
@@ -39,10 +39,11 @@ class MainApp extends React.Component {
     this.timerReset();
     var lr = []
     while (lr.length < this.state.count) {
-      var i = parseInt(Math.random() * 10)
+      var i = parseInt(Math.random() * 10) % 9
 
       if (lr.includes(i)) continue;
       lr.push(i)
+      console.log(lr);
     }
     this.setState({ listReq: lr, listPass: [], listErr: [] })
   }
@@ -74,15 +75,17 @@ class MainApp extends React.Component {
       }
       if (s.listReq.includes(i)) {
         s.listReq = s.listReq.filter(v => v != i);
-        s.listPass.push(i);
+        s.listPass = [...s.listPass, i]
       } else {
         s.listReq = s.listReq.filter(v => v != i);
         s.listPass = s.listPass.filter(v => v != i);
-        s.listErr.push(i);
+        s.listErr = [...s.listErr, i]
+
       }
       if (s.listReq.length == 0) {
         this.timerStop();
       }
+      return s
     });
   }
   timerStop = () => {
@@ -109,20 +112,34 @@ class MainApp extends React.Component {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        <Text>{this.state.time}</Text>
+        <Text style={{ fontSize: 25 }}>{this.state.time}</Text>
+        <View style={{ height: 50 }}></View>
         {table}
+        <View style={{ height: 50 }}></View>
         <View style={{ flexDirection: "row" }}>
           <Button onPress={_ => this.state.isRunning ? this.timerStop() : this.timerStart()}
             title={this.state.isRunning ? "Stop" : "Start"}></Button>
+          <View style={{ width: 50 }}></View>
           <Button title="Reset" onPress={this.init} />
         </View>
+        <Slider
+          style={{ width: 300, height: 40 }}
+          minimumValue={1}
+          maximumValue={9}
+          onValueChange={v => {
+            console.log(v);
+            this.setState({ count: v }, () => { this.init() })
+          }}
+          value={this.state.count}
+          step={1}
+        />
       </View>
     );
   }
 }
 
 const SqButton = ({ color, onPress }) => <TouchableOpacity onPress={onPress} >
-  <View style={{ margin: 5, backgroundColor: color, width: 100, height: 100, borderRadius: 4 }} ></View>
+  <View style={{ margin: 5, backgroundColor: color, width: 100, height: 100, borderRadius: 2 }} ></View>
 </TouchableOpacity>
 
 const col = {
