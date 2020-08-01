@@ -60,10 +60,13 @@ class MainApp extends React.Component {
     this.setState({ isRunning: true });
     this.counter = performance.now();
     this.timer = setInterval(() => {
+     
+     // console.time("cal")
       var diff = performance.now() - this.counter;
       var time = msToTime(diff);
+     // console.timeEnd("cal")
       this.setState({ time })
-    }, 1000 / 60)
+    }, 1000 / 10)
   }
 
   onPress = (i) => {
@@ -153,7 +156,6 @@ const col = {
 }
 
 function msToTime(s) {
-
   // Pad to 2 or 3 digits, default is 2
   function pad(n, z) {
     z = z || 2;
@@ -166,6 +168,6 @@ function msToTime(s) {
   s = (s - secs) / 60;
   var mins = s % 60;
   var hrs = (s - mins) / 60;
-
-  return pad(hrs) + ':' + pad(mins) + ':' + pad(secs) + '.' + pad(ms, 4);
+  var strms = pad(Number.parseInt(ms), 3)
+  return pad(hrs) + ':' + pad(mins) + ':' + pad(secs) + '.' + strms;
 }
