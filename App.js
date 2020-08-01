@@ -89,20 +89,22 @@ class MainApp extends React.Component {
     });
   }
   timerStop = () => {
-    this.setState({ isRunning: false });
     clearInterval(this.timer)
-
+    var diff = performance.now() - this.counter;
+    var time = msToTime(diff);
+    this.setState({ isRunning: false, time });
   }
 
   timerReset = () => {
     this.timerStop();
+
     this.setState({ isRunning: false, time: msToTime(0) });
   }
 
   render() {
     const table = num.map(i => {
-      const row = i.map(ii => <SqButton color={this.colowSw(ii)} onPress={_ => this.onPress(ii)} />)
-      return <View style={{ flexDirection: "row" }} >{row}</View>
+      const row = i.map(ii => <SqButton key={ii} color={this.colowSw(ii)} onPress={_ => this.onPress(ii)} />)
+      return <View key={i[0]} style={{ flexDirection: "row" }} >{row}</View>
     })
     return (
       <View
@@ -112,7 +114,7 @@ class MainApp extends React.Component {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        <Text style={{ fontSize: 25 }}>{this.state.time}</Text>
+        <Text style={{ fontSize: 30 }}>{this.state.time}</Text>
         <View style={{ height: 50 }}></View>
         {table}
         <View style={{ height: 50 }}></View>
@@ -122,6 +124,7 @@ class MainApp extends React.Component {
           <View style={{ width: 50 }}></View>
           <Button title="Reset" onPress={this.init} />
         </View>
+        <View style={{ height: 20 }}></View>
         <Slider
           style={{ width: 300, height: 40 }}
           minimumValue={1}
