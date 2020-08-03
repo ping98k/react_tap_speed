@@ -66,7 +66,7 @@ class MainApp extends React.Component {
       var time = msToTime(diff);
      // console.timeEnd("cal")
       this.setState({ time })
-    }, 1000 / 10)
+    }, 1000 / 60)
   }
 
   onPress = (i) => {
